@@ -14,7 +14,6 @@ const locationOptions: { label: string; value: LocationFilter }[] = [
 
 const emptyForm = {
   artistName: "",
-  fullName: "",
   phone: "",
   email: "",
   consent: false,
@@ -62,18 +61,23 @@ export default function HomePage() {
     async function loadSlots() {
       setLoading(true);
       setError(null);
+
       try {
         const search = new URLSearchParams({
           location,
           duration: String(duration)
         });
+
         const response = await fetch(`/api/availability?${search.toString()}`, {
           signal: controller.signal
         });
+
         const data = await response.json();
+
         if (!response.ok) {
           throw new Error(data.error || "Impossible de charger les disponibilités.");
         }
+
         setSlots(data.slots);
       } catch (loadError) {
         if ((loadError as Error).name !== "AbortError") {
@@ -111,7 +115,7 @@ export default function HomePage() {
       durationHours: selectedSlot.durationHours,
       priceTotal: selectedSlot.priceTotal,
       artistName: form.artistName,
-      fullName: form.fullName,
+      fullName: form.artistName,
       phone: form.phone,
       email: form.email,
       consent: form.consent,
@@ -124,11 +128,16 @@ export default function HomePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
+
       const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.error || "La réservation n’a pas pu être créée.");
       }
-      setMessage("Votre créneau est bien bloqué. Merci de respecter l’horaire réservé. Maximum 5 personnes par séance.");
+
+      setMessage(
+        "Votre créneau est bien bloqué. Merci de respecter l’horaire réservé. Maximum 5 personnes par séance."
+      );
       setSelectedSlot(null);
       setForm(emptyForm);
       setSlots((current) => current.filter((slot) => slot.id !== selectedSlot.id));
@@ -195,7 +204,9 @@ export default function HomePage() {
       <section className="slots" aria-label="Prochaines disponibilités">
         <div className="section-title">
           <p className="step">3. Créneaux</p>
-          <span>{loading ? "Chargement" : `${slots.length} disponible${slots.length > 1 ? "s" : ""}`}</span>
+          <span>
+            {loading ? "Chargement" : `${slots.length} disponible${slots.length > 1 ? "s" : ""}`}
+          </span>
         </div>
 
         {loading ? (
@@ -210,16 +221,19 @@ export default function HomePage() {
                   <h2>{slot.studioName}</h2>
                   <p>{slot.city}</p>
                 </div>
+
                 <div className="slot-time">
                   <strong>{slot.dateLabel}</strong>
                   <span>
                     {slot.startTimeLabel} - {slot.endTimeLabel}
                   </span>
                 </div>
+
                 <div className="slot-meta">
                   <span>{slot.durationHours}h</span>
                   <strong>{slot.priceTotal}€</strong>
                 </div>
+
                 <button className="primary" onClick={() => openForm(slot)} type="button">
                   Bloquer ce créneau
                 </button>
@@ -241,12 +255,14 @@ export default function HomePage() {
                 <p className="eyebrow">Réservation</p>
                 <h2 id="booking-title">{selectedSlot.studioName}</h2>
                 <span>
-                  {selectedSlot.dateLabel}, {selectedSlot.startTimeLabel} - {selectedSlot.endTimeLabel}
+                  {selectedSlot.dateLabel}, {selectedSlot.startTimeLabel} -{" "}
+                  {selectedSlot.endTimeLabel}
                 </span>
                 <strong>
                   {selectedSlot.durationHours}h - {selectedSlot.priceTotal}€
                 </strong>
               </div>
+
               <button className="ghost" onClick={() => setSelectedSlot(null)} type="button">
                 Fermer
               </button>
@@ -259,16 +275,6 @@ export default function HomePage() {
                 onChange={(event) => setForm({ ...form, artistName: event.target.value })}
                 required
                 value={form.artistName}
-              />
-            </label>
-
-            <label>
-              Prénom Nom
-              <input
-                autoComplete="name"
-                onChange={(event) => setForm({ ...form, fullName: event.target.value })}
-                required
-                value={form.fullName}
               />
             </label>
 
@@ -311,7 +317,10 @@ export default function HomePage() {
                 type="checkbox"
               />
               <span>
-                Je confirme m’engager à me présenter à ma séance. Je comprends qu’une réservation est un engagement et que toute annulation de dernière minute pénalise l’organisation du studio. Je reconnais avoir pris connaissance du tarif, de la durée réservée et de la limite de 5 personnes maximum par séance.
+                Je confirme m’engager à me présenter à ma séance. Je comprends qu’une réservation est
+                un engagement et que toute annulation de dernière minute pénalise l’organisation du
+                studio. Je reconnais avoir pris connaissance du tarif, de la durée réservée et de la
+                limite de 5 personnes maximum par séance.
               </span>
             </label>
 
