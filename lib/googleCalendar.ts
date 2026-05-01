@@ -1,0 +1,88 @@
+import { google } from "googleapis";
+import { DEMO_MODE, TIMEZONE } from "./config";
+import { addDemoReservation, getDemoBusySlots } from "./demoStore";
+import type { BookingRequest, BusySlot, Studio } from "./types";
+
+function getCalendarClient() {
+  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const auth = new google.auth.JWT({
+    email: process.env.GOOGLE_CLIENT_EMAIL,
+    key: privateKey,
+    scopes: ["https://www.googleapis.com/auth/calendar"]
+  });
+
+  return google.calendar({ version: "v3", auth });
+}
+
+export async function getBusySlots(calendarIds: string[], startDate: Date, endDate: Date) {
+  if (DEMO_MODE) {
+    return getDemoBusySlots(calendarIds);
+  }
+
+  const calendar = getCalendarClient();
+  const response = await calendar.freebusy.query({
+    requestBody: {
+      timeMin: startDate.toISOString(),
+      timeMax: endDate.toISOString(),
+      timeZone: TIMEZONE,
+      items: calendarIds.map((id) => ({ id }))
+    }
+  });
+
+  const result: Record<string, BusySlot[]> = {};
+  for (const calendarId of calendarIds) {
+    const busy = response.data.calendars?.[calendarId]?.busy || [];
+    result[calendarId] = busy.map((slot) => ({
+      start: slot.start || "",
+      end: slot.end || ""
+    }));
+  }
+
+  return result;
+}
+
+export async function createGoogleCalendarEvent(studio: Studio, booking: BookingRequest) {
+  if (DEMO_MODE) {
+    addDemoReservation(studio.calendarId, booking);
+    return { id: `demo-${Date.now()}` };
+  }
+
+  const calendar = getCalendarClient();
+  const names = splitName(booking.fullName);
+  const response = await calendar.events.insert({
+    calendarId: studio.calendarId,
+    requestBody: {
+      summary: `Réservation Blockstudio — ${booking.fullName} — ${booking.durationHours}h`,
+      description: [
+        `Prénom : ${names.firstName}`,
+        `Nom : ${names.lastName}`,
+        `Téléphone : ${booking.phone}`,
+        `Email : ${booking.email}`,
+        `Nom d'artiste : ${booking.artistName}`,
+        `Studio : ${studio.name}`,
+        `Ville : ${studio.city}`,
+        `Durée : ${booking.durationHours}h`,
+        `Prix total : ${booking.priceTotal}€`,
+        "Rappel : 5 personnes maximum"
+      ].join("\n"),
+      start: {
+        dateTime: booking.start,
+        timeZone: TIMEZONE
+      },
+      end: {
+        dateTime: booking.end,
+        timeZone: TIMEZONE
+      }
+    }
+  });
+
+  return { id: response.data.id };
+}
+
+function splitName(fullName: string) {
+  const parts = fullName.trim().split(/\s+/);
+  return {
+    firstName: parts[0] || "",
+    lastName: parts.slice(1).join(" ")
+  };
+}
