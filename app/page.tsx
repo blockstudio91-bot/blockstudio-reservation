@@ -101,7 +101,8 @@ export default function HomePage() {
 
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selectedSlot) return;
+    if (!/^(0[67][0-9]{8}|\+?[0-9]{8,15})$/.test(form.phone)) {
+  setError("Numéro de téléphone invalide");
 
     setSubmitting(true);
     setError(null);
