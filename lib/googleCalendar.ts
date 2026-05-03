@@ -3,8 +3,11 @@ import { DEMO_MODE, TIMEZONE } from "./config";
 import { addDemoReservation, getDemoBusySlots } from "./demoStore";
 import type { BookingRequest, BusySlot, Studio } from "./types";
 
+const NOTIFICATION_EMAIL = "blockstudio91@gmail.com";
+
 function getCalendarClient() {
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+
   const auth = new google.auth.JWT({
     email: process.env.GOOGLE_CLIENT_EMAIL,
     key: privateKey,
@@ -20,6 +23,7 @@ export async function getBusySlots(calendarIds: string[], startDate: Date, endDa
   }
 
   const calendar = getCalendarClient();
+
   const response = await calendar.freebusy.query({
     requestBody: {
       timeMin: startDate.toISOString(),
@@ -30,8 +34,10 @@ export async function getBusySlots(calendarIds: string[], startDate: Date, endDa
   });
 
   const result: Record<string, BusySlot[]> = {};
+
   for (const calendarId of calendarIds) {
     const busy = response.data.calendars?.[calendarId]?.busy || [];
+
     result[calendarId] = busy.map((slot) => ({
       start: slot.start || "",
       end: slot.end || ""
@@ -48,22 +54,25 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
   }
 
   const calendar = getCalendarClient();
-  const names = splitName(booking.fullName);
+
   const response = await calendar.events.insert({
     calendarId: studio.calendarId,
+    sendUpdates: "all",
     requestBody: {
-      summary: `Réservation Blockstudio — ${booking.fullName} — ${booking.durationHours}h`,
+      summary: `🚨 EXPRESS — ${booking.artistName} — ${booking.durationHours}h`,
       description: [
-        `Prénom : ${names.firstName}`,
-        `Nom : ${names.lastName}`,
+        "⚠️ RÉSERVATION EXPRESS BLOCKSTUDIO",
+        "",
+        `Nom d'artiste : ${booking.artistName}`,
         `Téléphone : ${booking.phone}`,
         `Email : ${booking.email}`,
-        `Nom d'artiste : ${booking.artistName}`,
         `Studio : ${studio.name}`,
         `Ville : ${studio.city}`,
         `Durée : ${booking.durationHours}h`,
         `Prix total : ${booking.priceTotal}€`,
-        "Rappel : 5 personnes maximum"
+        "",
+        "Rappel : 5 personnes maximum par séance.",
+        "Réservation effectuée via le système Last Minute Blockstudio."
       ].join("\n"),
       start: {
         dateTime: booking.start,
@@ -72,17 +81,27 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
       end: {
         dateTime: booking.end,
         timeZone: TIMEZONE
+      },
+      attendees: [
+        {
+          email: NOTIFICATION_EMAIL
+        }
+      ],
+      reminders: {
+        useDefault: false,
+        overrides: [
+          {
+            method: "popup",
+            minutes: 10
+          },
+          {
+            method: "email",
+            minutes: 10
+          }
+        ]
       }
     }
   });
 
   return { id: response.data.id };
-}
-
-function splitName(fullName: string) {
-  const parts = fullName.trim().split(/\s+/);
-  return {
-    firstName: parts[0] || "",
-    lastName: parts.slice(1).join(" ")
-  };
 }
