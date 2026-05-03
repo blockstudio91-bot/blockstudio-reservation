@@ -278,16 +278,21 @@ export default function HomePage() {
               />
             </label>
 
-            <label>
-              Téléphone
-              <input
-                autoComplete="tel"
-                inputMode="tel"
-                onChange={(event) => setForm({ ...form, phone: event.target.value })}
-                required
-                value={form.phone}
-              />
-            </label>
+           <label>
+  Téléphone
+  <input
+    autoComplete="tel"
+    inputMode="tel"
+    pattern="^(0[67][0-9]{8}|\\+?[0-9]{8,15})$"
+    placeholder="06XXXXXXXX ou +33..."
+    onChange={(event) => setForm({ ...form, phone: event.target.value })}
+    required
+    value={form.phone}
+  />
+  <small style={{ opacity: 0.6 }}>
+    Numéro vérifié automatiquement — toute fausse information entraîne l’annulation du créneau.
+  </small>
+</label>
 
             <label>
               Email
