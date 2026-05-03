@@ -56,7 +56,7 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
   const response = await calendar.events.insert({
     calendarId: studio.calendarId,
     requestBody: {
-      summary: `🚨 EXPRESS — ${booking.artistName} — ${booking.durationHours}h`,
+      summary: `Réservation studio — ${booking.artistName} — ${booking.durationHours}h`,
       description: [
         "⚠️ RÉSERVATION EXPRESS BLOCKSTUDIO",
         "",
