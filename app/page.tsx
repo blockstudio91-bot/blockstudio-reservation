@@ -6,6 +6,8 @@ import type { BookingRequest, Slot, StudioCity } from "@/lib/types";
 type DurationOption = 1 | 2;
 type LocationFilter = StudioCity | "all";
 
+const phoneRegex = /^(0[67][0-9]{8}|[0-9+]{8,15})$/;
+
 const locationOptions: { label: string; value: LocationFilter }[] = [
   { label: "Corbeil-Essonnes", value: "Corbeil-Essonnes" },
   { label: "Savigny-le-Temple", value: "Savigny-le-Temple" },
@@ -101,10 +103,13 @@ export default function HomePage() {
 
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!/^(0[67][0-9]{8}|\+?[0-9]{8,15})$/.test(form.phone)) {
-  setError("Numéro de téléphone invalide");
-  return;
-};
+
+    if (!selectedSlot) return;
+
+    if (!phoneRegex.test(form.phone)) {
+      setError("Numéro de téléphone invalide. Exemple accepté : 06XXXXXXXX ou +33XXXXXXXXX.");
+      return;
+    }
 
     setSubmitting(true);
     setError(null);
@@ -141,6 +146,7 @@ export default function HomePage() {
       setMessage(
         "Votre créneau est bien bloqué. Merci de respecter l’horaire réservé. Maximum 5 personnes par séance."
       );
+
       setSelectedSlot(null);
       setForm(emptyForm);
       setSlots((current) => current.filter((slot) => slot.id !== selectedSlot.id));
@@ -281,21 +287,21 @@ export default function HomePage() {
               />
             </label>
 
-           <label>
-  Téléphone
-  <input
-    autoComplete="tel"
-    inputMode="tel"
-    pattern="^(0[67][0-9]{8}|\\+?[0-9]{8,15})$"
-    placeholder="06XXXXXXXX ou +33..."
-    onChange={(event) => setForm({ ...form, phone: event.target.value })}
-    required
-    value={form.phone}
-  />
-  <small style={{ opacity: 0.6 }}>
-    Numéro vérifié automatiquement — toute fausse information entraîne l’annulation du créneau.
-  </small>
-</label>
+            <label>
+              Téléphone
+              <input
+                autoComplete="tel"
+                inputMode="tel"
+                pattern="^(0[67][0-9]{8}|[0-9+]{8,15})$"
+                placeholder="06XXXXXXXX ou +33..."
+                onChange={(event) => setForm({ ...form, phone: event.target.value })}
+                required
+                value={form.phone}
+              />
+              <small style={{ opacity: 0.6 }}>
+                Numéro vérifié automatiquement — toute fausse information entraîne l’annulation du créneau.
+              </small>
+            </label>
 
             <label>
               Email
