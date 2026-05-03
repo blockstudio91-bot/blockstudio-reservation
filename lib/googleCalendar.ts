@@ -3,8 +3,6 @@ import { DEMO_MODE, TIMEZONE } from "./config";
 import { addDemoReservation, getDemoBusySlots } from "./demoStore";
 import type { BookingRequest, BusySlot, Studio } from "./types";
 
-const NOTIFICATION_EMAIL = "blockstudio91@gmail.com";
-
 function getCalendarClient() {
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
@@ -57,7 +55,6 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
 
   const response = await calendar.events.insert({
     calendarId: studio.calendarId,
-    sendUpdates: "all",
     requestBody: {
       summary: `🚨 EXPRESS — ${booking.artistName} — ${booking.durationHours}h`,
       description: [
@@ -82,20 +79,11 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
         dateTime: booking.end,
         timeZone: TIMEZONE
       },
-      attendees: [
-        {
-          email: NOTIFICATION_EMAIL
-        }
-      ],
       reminders: {
         useDefault: false,
         overrides: [
           {
             method: "popup",
-            minutes: 10
-          },
-          {
-            method: "email",
             minutes: 10
           }
         ]
