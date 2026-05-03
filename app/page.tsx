@@ -103,6 +103,8 @@ export default function HomePage() {
     event.preventDefault();
     if (!/^(0[67][0-9]{8}|\+?[0-9]{8,15})$/.test(form.phone)) {
   setError("Numéro de téléphone invalide");
+  return;
+};
 
     setSubmitting(true);
     setError(null);
