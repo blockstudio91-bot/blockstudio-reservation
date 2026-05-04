@@ -2,14 +2,15 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Blockstudio – Créneaux studio disponibles",
+  title: "Blockstudio – Studios disponibles maintenant",
+
   description:
-    "Consultez les disponibilités en temps réel et réservez une séance courte à Corbeil-Essonnes ou Savigny-le-Temple.",
+    "Studios libres en temps réel. Réservez immédiatement une séance de 1h ou 2h à Corbeil-Essonnes ou Savigny-le-Temple.",
 
   openGraph: {
-    title: "Blockstudio – Créneaux studio disponibles",
+    title: "Studios disponibles maintenant",
     description:
-      "Consultez les disponibilités en temps réel et réservez une séance courte à Corbeil-Essonnes ou Savigny-le-Temple.",
+      "Voir les créneaux libres en temps réel et réserver immédiatement une séance de 1h ou 2h.",
     url: "https://blockstudio-reservation.vercel.app/",
     siteName: "Blockstudio",
     type: "website",
@@ -17,17 +18,17 @@ export const metadata: Metadata = {
       {
         url: "https://blockstudio-reservation.vercel.app/og-image.jpg",
         width: 1200,
-        height: 630,
-        alt: "Blockstudio - Créneaux studio disponibles"
+        height: 1200,
+        alt: "Studios disponibles maintenant"
       }
     ]
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Blockstudio – Créneaux studio disponibles",
+    title: "Studios disponibles maintenant",
     description:
-      "Réservez rapidement une séance studio en fonction des disponibilités en temps réel.",
+      "Réservez immédiatement une séance studio de 1h ou 2h selon les disponibilités en temps réel.",
     images: ["https://blockstudio-reservation.vercel.app/og-image.jpg"]
   }
 };
