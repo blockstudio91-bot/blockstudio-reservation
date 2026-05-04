@@ -394,8 +394,8 @@ export default function HomePage() {
                 {confirmedSlot.dateLabel}
               </span>
               <span style={{ display: "block", fontSize: "15px", color: "#ff6600", marginTop: "4px" }}>
-                {confirmedSlot.startTimeLabel} - {confirmedSlot.endTimeLabel}
-              <span>
+  {confirmedSlot.startTimeLabel} - {confirmedSlot.endTimeLabel}
+<span>
   Une réservation est un engagement. Merci de vous présenter à l’heure prévue. En cas d’empêchement, contactez immédiatement le studio au 06 15 68 70 53 afin de libérer le créneau pour un autre artiste.
 </span>
 
