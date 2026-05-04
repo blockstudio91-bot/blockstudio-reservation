@@ -143,9 +143,11 @@ export default function HomePage() {
         throw new Error(data.error || "La réservation n’a pas pu être créée.");
       }
 
-      setMessage(
-        "Votre créneau est bien bloqué. Merci de respecter l’horaire réservé. Maximum 5 personnes par séance."
-      );
+   setMessage(
+  "Votre créneau est bien bloqué. Merci de respecter l’horaire réservé. Maximum 5 personnes par séance. Si vous souhaitez annulé merci de contacter immédiatement par msg le 0615687053"
+);
+
+alert("Réservation confirmée. Votre créneau est bien enregistré.");
 
       setSelectedSlot(null);
       setForm(emptyForm);
