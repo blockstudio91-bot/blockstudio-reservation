@@ -395,16 +395,19 @@ export default function HomePage() {
               </span>
               <span style={{ display: "block", fontSize: "15px", color: "#ff6600", marginTop: "4px" }}>
                 {confirmedSlot.startTimeLabel} - {confirmedSlot.endTimeLabel}
-              </span>
-            </div>
+              <span>
+  Une réservation est un engagement. Merci de vous présenter à l’heure prévue. En cas d’empêchement, contactez immédiatement le studio au 06 15 68 70 53 afin de libérer le créneau pour un autre artiste.
+</span>
 
-            <p style={{ fontSize: "13px", opacity: 0.78, lineHeight: 1.5 }}>
-              Merci de vous présenter à l’heure prévue. Maximum 5 personnes par séance.
-            </p>
+</div>
 
-            <p style={{ fontSize: "13px", color: "#ff6600", lineHeight: 1.5 }}>
-              En cas d’annulation, contactez immédiatement le 06 15 68 70 53.
-            </p>
+<p style={{ fontSize: "13px", opacity: 0.78, lineHeight: 1.5 }}>
+  Séance limitée à 5 personnes maximum pour garantir de bonnes conditions de travail.
+</p>
+
+<p style={{ fontSize: "13px", color: "#ff6600", lineHeight: 1.5, fontWeight: 500 }}>
+  Toute réservation non honorée sans prévenir peut entraîner un refus de réservation future.
+</p>
 
             <button
               onClick={() => {
