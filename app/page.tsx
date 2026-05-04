@@ -371,41 +371,48 @@ export default function HomePage() {
           >
             <div style={{ fontSize: "42px", marginBottom: "8px" }}>✓</div>
 
-            <h2 style={{ fontSize: "22px", margin: "0 0 10px" }}>
-              Réservation confirmée
-            </h2>
+           <h2 style={{ fontSize: "22px", margin: "0 0 10px" }}>
+  Réservation confirmée
+</h2>
 
-            <p style={{ fontSize: "15px", opacity: 0.85, margin: "0 0 14px" }}>
-              Votre créneau est bien bloqué.
-            </p>
+<div
+  style={{
+    background: "rgba(255,255,255,0.06)",
+    borderRadius: "16px",
+    padding: "16px",
+    marginBottom: "16px"
+  }}
+>
+  <strong style={{ display: "block", fontSize: "16px", marginBottom: "6px" }}>
+    {confirmedSlot.studioName}
+  </strong>
 
-            <div
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                borderRadius: "16px",
-                padding: "14px",
-                marginBottom: "14px"
-              }}
-            >
-              <strong style={{ display: "block", fontSize: "16px", marginBottom: "6px" }}>
-                {confirmedSlot.studioName}
-              </strong>
-              <span style={{ display: "block", fontSize: "15px", color: "#ff6600", marginTop: "4px" }}>
-  {confirmedSlot.startTimeLabel} - {confirmedSlot.endTimeLabel}
-</span>
-
-<p style={{ fontSize: "13px", opacity: 0.78, lineHeight: 1.5, marginTop: "12px" }}>
-  Une réservation est un engagement. Merci de vous présenter à l’heure prévue. En cas d’empêchement, contactez immédiatement le studio au 06 15 68 70 53 afin de libérer le créneau pour un autre artiste.
-</p>
-
+  <span
+    style={{
+      display: "block",
+      fontSize: "15px",
+      color: "#ff6600"
+    }}
+  >
+    {confirmedSlot.startTimeLabel} – {confirmedSlot.endTimeLabel}
+  </span>
 </div>
 
-<p style={{ fontSize: "13px", opacity: 0.78, lineHeight: 1.5 }}>
-  Séance limitée à 5 personnes maximum pour garantir de bonnes conditions de travail.
+<p style={{ fontSize: "15px", opacity: 0.85, lineHeight: 1.5 }}>
+  Votre créneau est réservé.
 </p>
 
-<p style={{ fontSize: "13px", color: "#ff6600", lineHeight: 1.5, fontWeight: 500 }}>
-  Toute réservation non honorée sans prévenir peut entraîner un refus de réservation future.
+<p style={{ fontSize: "15px", opacity: 0.85, lineHeight: 1.5 }}>
+  Merci d’être présent à l’heure prévue.
+</p>
+
+<p style={{ fontSize: "15px", color: "#ff6600", lineHeight: 1.5 }}>
+  En cas d’empêchement<br />
+  06 15 68 70 53
+</p>
+
+<p style={{ fontSize: "14px", opacity: 0.75, lineHeight: 1.5 }}>
+  5 personnes maximum
 </p>
 
             <button
