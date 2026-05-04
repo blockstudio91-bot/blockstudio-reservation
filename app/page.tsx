@@ -390,14 +390,13 @@ export default function HomePage() {
               <strong style={{ display: "block", fontSize: "16px", marginBottom: "6px" }}>
                 {confirmedSlot.studioName}
               </strong>
-              <span style={{ display: "block", fontSize: "15px" }}>
-                {confirmedSlot.dateLabel}
-              </span>
               <span style={{ display: "block", fontSize: "15px", color: "#ff6600", marginTop: "4px" }}>
   {confirmedSlot.startTimeLabel} - {confirmedSlot.endTimeLabel}
-<span>
-  Une réservation est un engagement. Merci de vous présenter à l’heure prévue. En cas d’empêchement, contactez immédiatement le studio au 06 15 68 70 53 afin de libérer le créneau pour un autre artiste.
 </span>
+
+<p style={{ fontSize: "13px", opacity: 0.78, lineHeight: 1.5, marginTop: "12px" }}>
+  Une réservation est un engagement. Merci de vous présenter à l’heure prévue. En cas d’empêchement, contactez immédiatement le studio au 06 15 68 70 53 afin de libérer le créneau pour un autre artiste.
+</p>
 
 </div>
 
