@@ -58,7 +58,7 @@ export async function createGoogleCalendarEvent(studio: Studio, booking: Booking
     requestBody: {
       summary: `Réservation studio — ${booking.artistName} — ${booking.durationHours}h`,
       description: [
-        "⚠️ RÉSERVATION EXPRESS BLOCKSTUDIO",
+        "RÉSERVATION BLOCKSTUDIO",
         "",
         `Nom d'artiste : ${booking.artistName}`,
         `Téléphone : ${booking.phone}`,
