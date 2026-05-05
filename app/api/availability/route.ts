@@ -19,10 +19,19 @@ export async function GET(request: NextRequest) {
 
   const now = new Date();
   const end = addHours(now, 24 * 8);
+
   const calendarIds = studios.map((studio) => studio.calendarId);
   const busySlots = await getBusySlots(calendarIds, now, end);
+
   const allSlots = generateAvailableSlots(studios, busySlots, duration);
   const slots = filterSlotsByStudioAndCity(allSlots, location, duration);
 
-  return NextResponse.json({ slots });
+  const MIN_BOOKING_DELAY = 90; // 1h30
+  const minBookingDate = new Date(now.getTime() + MIN_BOOKING_DELAY * 60 * 1000);
+
+  const filteredSlots = slots.filter((slot) => {
+    return new Date(slot.start) >= minBookingDate;
+  });
+
+  return NextResponse.json({ slots: filteredSlots });
 }
